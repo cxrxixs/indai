@@ -63,7 +63,8 @@ class Github():
         subprocess.call(cmd_add_remote, shell=True)
 
         # Push to remote
-        cmd_push_remote = 'git push indai master'
+        # cmd_push_remote = 'git push indai master'
+        cmd_push_remote = 'git push indai HEAD:master'
         subprocess.call(cmd_push_remote, shell=True)
 
         print('Done')
