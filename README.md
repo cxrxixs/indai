@@ -8,12 +8,12 @@ What's in the name, **IN**termediate **D**eployment **A**ssistance **I**nterface
 Requires Heroku account.
 
 ## TODO
-- [ ] Main CLI
+- [X] Main CLI
 - [ ] Functions
     - [X] Deploy : Push current repo to Github and build Heroku app
 
     - [X] Cleanup : Delete Github repo and Heroku app
 
-    - [ ] Reupload : If repo/app already exist skip creation and proceed to upload/build
+    - [X] Reupload : If repo/app already exist skip creation and proceed to upload/build
 
     - [ ] Test : Run test on temporary app
