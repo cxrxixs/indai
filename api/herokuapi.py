@@ -30,6 +30,22 @@ class Heroku():
             'Authorization': 'Bearer {}' .format(self.TOKEN)
         }
 
+    def check_app(self):
+        # GET /apps/{app_name_or_app_id}
+
+        API_LINK = "/apps/{}".format(self.app_name)
+
+        resp = requests.get(
+            self.URL + API_LINK,
+            headers=self.HEADERS
+        )
+
+        if resp.status_code == 200:
+            self.response = json.loads(resp.content)
+            return True
+        else:
+            return False
+
     def create_app(self):
         """Create heroku app"""
 
@@ -198,7 +214,14 @@ class Heroku():
     def deploy(self):
 
         self.generate_token()
-        self.create_app()
-        self.build_app()
-        self.setup_database()
-        self.setup_confvar()
+
+        self.app_exists = self.check_app()
+
+        if self.app_exists:
+            print("App already exists")
+            self.build_app()
+        else:
+            self.create_app()
+            self.build_app()
+            self.setup_database()
+            self.setup_confvar()

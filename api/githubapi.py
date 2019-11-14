@@ -17,6 +17,29 @@ class Github():
         self.dir_name = os.getcwd().split('/')[-1]
         self.repo_name = ''.join(['temp-', self.dir_name])
 
+    def check_repo(self):
+
+        # GET /repos/:owner/:repo
+        API_LINK = "/repos/{}/{}".format(self.username, self.repo_name)
+
+        headers = {
+            'content-type': 'application/json',
+            'User-Agent': 'indai'
+        }
+
+        resp = requests.get(
+            self.URL + API_LINK,
+            auth=(self.username, self.password),
+            headers=headers,
+        )
+
+        if resp.status_code == 200:
+            self.response = json.loads(resp.text)
+            return True
+
+        else:
+            return False
+
     def create_repo(self):
         """Create temporary github repo"""
 
@@ -57,10 +80,11 @@ class Github():
         print('Pushing repo to Github...', end='')
         time.sleep(5)
 
-        # Add new repo to git remote
-        cmd_add_remote = 'git remote add indai {}' .format(
-            self.response['svn_url'])
-        subprocess.call(cmd_add_remote, shell=True)
+        if not self.repo_exists:
+            # Add new repo to git remote
+            cmd_add_remote = 'git remote add indai {}' .format(
+                self.response['svn_url'])
+            subprocess.call(cmd_add_remote, shell=True)
 
         # Push to remote
         # cmd_push_remote = 'git push indai master'
@@ -152,6 +176,18 @@ class Github():
     def deploy(self):
         """Deploy current repo to GH"""
 
-        self.create_repo()
+        # check if repo already exists
+        # if self.repo_exists is False:
+        #     # create repo if not exists
+        #     # else push source to repo
+        #     self.create_repo()
+
+        self.repo_exists = self.check_repo()
+
+        if self.repo_exists:
+            print("Repo already exists")
+        else:
+            self.create_repo()
+
         self.upload_repo()
         self.download_repo()
