@@ -77,6 +77,7 @@ class Github():
             sys.exit(1)
 
     def upload_repo(self):
+
         print('Pushing repo to Github...', end='')
         time.sleep(5)
 
@@ -85,10 +86,11 @@ class Github():
             cmd_add_remote = 'git remote add indai {}' .format(
                 self.response['svn_url'])
             subprocess.call(cmd_add_remote, shell=True)
+            cmd_push_remote = 'git push indai HEAD:master'
+        else:
+            cmd_push_remote = 'git push indai HEAD:master --force'
 
         # Push to remote
-        # cmd_push_remote = 'git push indai master'
-        cmd_push_remote = 'git push indai HEAD:master'
         subprocess.call(cmd_push_remote, shell=True)
 
         print('Done')
